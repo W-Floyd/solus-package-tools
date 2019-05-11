@@ -32,3 +32,18 @@
  	Run: func(cmd *cobra.Command, args []string) {
  		fmt.Println("rebuild called")
  	},
+@@ -43,14 +24,4 @@
+ 
+ func init() {
+ 	gitCmd.AddCommand(rebuildCmd)
+-
+-	// Here you will define your flags and configuration settings.
+-
+-	// Cobra supports Persistent Flags which will work for this command
+-	// and all subcommands, e.g.:
+-	// rebuildCmd.PersistentFlags().String("foo", "", "A help for foo")
+-
+-	// Cobra supports local flags which will only run when this command
+-	// is called directly, e.g.:
+-	// rebuildCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+ }
