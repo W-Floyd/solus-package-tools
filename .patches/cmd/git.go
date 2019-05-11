@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,28 +1,6 @@
+@@ -1,56 +1,16 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
 -// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,13 +29,21 @@
  	"github.com/spf13/cobra"
  )
  
-@@ -36,21 +14,8 @@
- Cobra is a CLI library for Go that empowers applications.
- This application is a tool to generate the needed files
- to quickly create a Cobra application.`,
+ // gitCmd represents the git command
+ var gitCmd = &cobra.Command{
+ 	Use:   "git",
+-	Short: "A brief description of your command",
+-	Long: `A longer description that spans multiple lines and likely contains examples
+-and usage of using your command. For example:
+-
+-Cobra is a CLI library for Go that empowers applications.
+-This application is a tool to generate the needed files
+-to quickly create a Cobra application.`,
 -	Run: func(cmd *cobra.Command, args []string) {
 -		fmt.Println("git called")
 -	},
++	Short: "TODO",
++	Long:  `TODO`,
  }
  
  func init() {

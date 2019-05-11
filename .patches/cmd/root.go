@@ -48,3 +48,13 @@
  }
  
  // Execute adds all child commands to the root command and sets flags appropriately.
+@@ -58,9 +31,6 @@
+ func init() {
+ 	cobra.OnInitialize(initConfig)
+ 
+-	// Here you will define your flags and configuration settings.
+-	// Cobra supports persistent flags, which, if defined here,
+-	// will be global for your application.
+ 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-util.yaml)")
+ 
+ 	// Cobra also supports local flags, which will only run

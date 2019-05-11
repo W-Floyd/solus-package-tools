@@ -24,15 +24,24 @@
  package cmd
  
  import (
-@@ -36,6 +16,7 @@
- Cobra is a CLI library for Go that empowers applications.
- This application is a tool to generate the needed files
- to quickly create a Cobra application.`,
-+	Args: cobra.MinimumNArgs(1),
+@@ -29,13 +9,9 @@
+ // bumpCmd represents the bump command
+ var bumpCmd = &cobra.Command{
+ 	Use:   "bump",
+-	Short: "A brief description of your command",
+-	Long: `A longer description that spans multiple lines and likely contains examples
+-and usage of using your command. For example:
+-
+-Cobra is a CLI library for Go that empowers applications.
+-This application is a tool to generate the needed files
+-to quickly create a Cobra application.`,
++	Short: "TODO",
++	Long:  `TODO`,
++	Args:  cobra.MinimumNArgs(1),
  	Run: func(cmd *cobra.Command, args []string) {
  		fmt.Println("bump called")
  	},
-@@ -43,14 +24,4 @@
+@@ -43,14 +19,4 @@
  
  func init() {
  	gitCmd.AddCommand(bumpCmd)
