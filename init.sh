@@ -16,7 +16,7 @@ if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
     pushd "${__package_name}"
 
     find . -type f | while read -r __file; do
-        __patch="$(diff -Nau "../.${__package_name}/${__file}" "${__file}")"
+        __patch="$(diff -Nau "../.${__package_name}/${__file}" "${__file}" | sed -e '1,2s/ .*//' )"
         if ! [ -z "${__patch}" ]; then
             mkdir -p "$(dirname "../.patches/${__file}")"
             echo "${__patch}" > "../.patches/${__file}"
