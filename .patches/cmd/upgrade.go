@@ -1,5 +1,5 @@
---- ../.solus-package-util/./cmd/upgrade.go	2019-05-11 17:36:43.259364786 -0500
-+++ ./cmd/upgrade.go	2019-05-11 17:36:43.262364762 -0500
+---
++++
 @@ -1,23 +1,3 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
@@ -24,3 +24,11 @@
  package cmd
  
  import (
+@@ -36,6 +16,7 @@
+ Cobra is a CLI library for Go that empowers applications.
+ This application is a tool to generate the needed files
+ to quickly create a Cobra application.`,
++	Args: cobra.MinimumNArgs(1),
+ 	Run: func(cmd *cobra.Command, args []string) {
+ 		fmt.Println("upgrade called")
+ 	},

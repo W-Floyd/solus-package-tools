@@ -1,5 +1,5 @@
---- ../.solus-package-util/./cmd/root.go	2019-05-11 17:36:43.259364786 -0500
-+++ ./cmd/root.go	2019-05-11 17:36:43.264364746 -0500
+---
++++
 @@ -1,23 +1,3 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//

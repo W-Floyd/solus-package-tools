@@ -1,6 +1,6 @@
---- ../.solus-package-util/./cmd/git.go	2019-05-11 17:36:43.259364786 -0500
-+++ ./cmd/git.go	2019-05-11 17:36:43.260364778 -0500
-@@ -1,23 +1,3 @@
+---
++++
+@@ -1,28 +1,6 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
 -// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,3 +24,18 @@
  package cmd
  
  import (
+-	"fmt"
+-
+ 	"github.com/spf13/cobra"
+ )
+ 
+@@ -36,9 +14,6 @@
+ Cobra is a CLI library for Go that empowers applications.
+ This application is a tool to generate the needed files
+ to quickly create a Cobra application.`,
+-	Run: func(cmd *cobra.Command, args []string) {
+-		fmt.Println("git called")
+-	},
+ }
+ 
+ func init() {

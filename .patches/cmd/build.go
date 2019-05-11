@@ -1,5 +1,5 @@
---- ../.solus-package-util/./cmd/build.go	2019-05-11 17:36:43.259364786 -0500
-+++ ./cmd/build.go	2019-05-11 17:36:43.262364762 -0500
+---
++++
 @@ -1,23 +1,3 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
