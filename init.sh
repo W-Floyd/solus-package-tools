@@ -16,7 +16,7 @@ if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
     pushd "${__package_name}"
 
     find . -type f | while read -r __file; do
-        __patch="$(diff -Nau "../.${__package_name}/${__file}" "${__file}" | sed -e '1,2s/ .*//' )"
+        __patch="$(diff -Nau "../.${__package_name}/${__file}" "${__file}" | sed -e '1,2s/ .*//')"
         if ! [ -z "${__patch}" ]; then
             mkdir -p "$(dirname "../.patches/${__file}")"
             echo "${__patch}" > "../.patches/${__file}"
@@ -29,6 +29,8 @@ if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
     rm -r ".${__package_name}"
 fi
 
+################################################################################
+
 cobra init "${__package_full}"
 
 cobra add -t "${__package_full}" build
@@ -38,6 +40,10 @@ cobra add -t "${__package_full}" git
 cobra add -t "${__package_full}" -p gitCmd bump
 cobra add -t "${__package_full}" -p gitCmd upgrade
 cobra add -t "${__package_full}" -p gitCmd rebuild
+
+cobra add -t "${__package_full}" listPackages
+
+################################################################################
 
 cp -r "${__package_name}" ".${__package_name}"
 
@@ -52,5 +58,11 @@ if [ -d '.patches' ]; then
     popd
 
 fi
+
+pushd "${__package_name}"
+
+go build -o ~/go/bin/${__package_name}
+
+popd
 
 exit

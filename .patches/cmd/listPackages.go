@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,41 +1,19 @@
+@@ -1,56 +1,24 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
 -// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,9 +30,9 @@
  	"github.com/spf13/cobra"
  )
  
- // buildCmd represents the build command
- var buildCmd = &cobra.Command{
--	Use:   "build",
+ // listPackagesCmd represents the listPackages command
+ var listPackagesCmd = &cobra.Command{
+ 	Use:   "listPackages",
 -	Short: "A brief description of your command",
 -	Long: `A longer description that spans multiple lines and likely contains examples
 -and usage of using your command. For example:
@@ -40,26 +40,26 @@
 -Cobra is a CLI library for Go that empowers applications.
 -This application is a tool to generate the needed files
 -to quickly create a Cobra application.`,
-+	Use:       "build",
-+	Short:     "TODO",
-+	Long:      `TODO`,
-+	Args:      packages.InputCheckPackage,
-+	ValidArgs: packages.List(),
++	Short: "TODO",
++	Long:  `TODO`,
  	Run: func(cmd *cobra.Command, args []string) {
- 		fmt.Println("build called")
+-		fmt.Println("listPackages called")
++		for _, file := range packages.List() {
++			fmt.Println(file)
++		}
  	},
-@@ -43,14 +21,4 @@
+ }
  
  func init() {
- 	rootCmd.AddCommand(buildCmd)
+ 	rootCmd.AddCommand(listPackagesCmd)
 -
 -	// Here you will define your flags and configuration settings.
 -
 -	// Cobra supports Persistent Flags which will work for this command
 -	// and all subcommands, e.g.:
--	// buildCmd.PersistentFlags().String("foo", "", "A help for foo")
+-	// listPackagesCmd.PersistentFlags().String("foo", "", "A help for foo")
 -
 -	// Cobra supports local flags which will only run when this command
 -	// is called directly, e.g.:
--	// buildCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+-	// listPackagesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
  }

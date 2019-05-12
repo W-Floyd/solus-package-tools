@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,23 +1,3 @@
+@@ -1,41 +1,19 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
 -// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,10 +24,15 @@
  package cmd
  
  import (
-@@ -29,13 +9,9 @@
+ 	"fmt"
+ 
++	"github.com/W-Floyd/solus-package-tools/solus-package-util/cmd/packages"
+ 	"github.com/spf13/cobra"
+ )
+ 
  // rebuildCmd represents the rebuild command
  var rebuildCmd = &cobra.Command{
- 	Use:   "rebuild",
+-	Use:   "rebuild",
 -	Short: "A brief description of your command",
 -	Long: `A longer description that spans multiple lines and likely contains examples
 -and usage of using your command. For example:
@@ -35,13 +40,15 @@
 -Cobra is a CLI library for Go that empowers applications.
 -This application is a tool to generate the needed files
 -to quickly create a Cobra application.`,
-+	Short: "TODO",
-+	Long:  `TODO`,
-+	Args:  cobra.MinimumNArgs(1),
++	Use:       "rebuild",
++	Short:     "TODO",
++	Long:      `TODO`,
++	Args:      packages.InputCheckPackage,
++	ValidArgs: packages.List(),
  	Run: func(cmd *cobra.Command, args []string) {
  		fmt.Println("rebuild called")
  	},
-@@ -43,14 +19,4 @@
+@@ -43,14 +21,4 @@
  
  func init() {
  	gitCmd.AddCommand(rebuildCmd)
