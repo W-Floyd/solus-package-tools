@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,56 +1,24 @@
+@@ -1,56 +1,27 @@
 -// Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -//
 -// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,12 +36,14 @@
 -	Short: "A brief description of your command",
 -	Long: `A longer description that spans multiple lines and likely contains examples
 -and usage of using your command. For example:
--
++	Short: "Lists all packages in the current folder.",
++	Long: `Lists all packages in the current folder.
+ 
 -Cobra is a CLI library for Go that empowers applications.
 -This application is a tool to generate the needed files
 -to quickly create a Cobra application.`,
-+	Short: "TODO",
-+	Long:  `TODO`,
++Specifically, folders that are not filtered, and have a 'package.yml' file.`,
++	Args: cobra.NoArgs,
  	Run: func(cmd *cobra.Command, args []string) {
 -		fmt.Println("listPackages called")
 +		for _, file := range packages.List() {

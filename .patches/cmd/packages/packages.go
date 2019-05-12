@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,78 @@
 +package packages
 +
 +import (
@@ -39,12 +39,16 @@
 +	}
 +
 +	if !strings.HasPrefix(f.Name(), ".") && f.IsDir() {
-+		return true
++		if _, err := os.Stat(f.Name() + "/package.yml"); !os.IsNotExist(err) {
++			return true
++		}
++
 +	}
 +	return false
 +}
 +
 +// List lists all packages in the current directory
++//
 +// TODO: Make to list only packages, currently lists all files.
 +func List() []string {
 +
@@ -71,7 +75,7 @@
 +// InputCheckPackage determines whether at least one valid package has been provided
 +func InputCheckPackage(cmd *cobra.Command, args []string) error {
 +	if len(args) < 1 {
-+		return errors.New("requires at least 1 argument")
++		return errors.New("At least 1 argument is required")
 +	}
 +	return cobra.OnlyValidArgs(cmd, args)
 +}
