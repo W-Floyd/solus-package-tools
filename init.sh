@@ -41,7 +41,9 @@ cobra add -t "${__package_full}" -p gitCmd bump
 cobra add -t "${__package_full}" -p gitCmd upgrade
 cobra add -t "${__package_full}" -p gitCmd rebuild
 
-cobra add -t "${__package_full}" listPackages
+cobra add -t "${__package_full}" list
+
+cobra add -t "${__package_full}" graph
 
 ################################################################################
 
