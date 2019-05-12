@@ -44,7 +44,7 @@
 +	Short:     "TODO",
 +	Long:      `TODO`,
 +	Args:      packages.InputCheckPackage,
-+	ValidArgs: packages.List(),
++	ValidArgs: packages.ListNames(),
  	Run: func(cmd *cobra.Command, args []string) {
  		fmt.Println("build called")
  	},
