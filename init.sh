@@ -45,6 +45,8 @@ cobra add -t "${__package_full}" list
 
 cobra add -t "${__package_full}" graph
 
+cobra add -t "${__package_full}" info
+
 ################################################################################
 
 cp -r "${__package_name}" ".${__package_name}"

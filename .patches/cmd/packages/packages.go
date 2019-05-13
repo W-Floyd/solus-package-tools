@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,196 @@
 +package packages
 +
 +import (
@@ -11,13 +11,15 @@
 +	"strings"
 +
 +	"github.com/spf13/cobra"
-+	"gopkg.in/yaml.v2"
++	"gopkg.in/yaml.v3"
 +)
 +
++// PackageFile holds all information for a package, as parsed from YAML
 +type PackageFile struct {
-+	Name    string
-+	Version string
-+	Release int
++	Name      string
++	Version   string
++	Release   int
++	Builddeps []string
 +}
 +
 +// SolusPackage holds all information related to a package
@@ -25,6 +27,19 @@
 +	Name    string
 +	Version string
 +	Release int
++	// Builddeps are really only the builddeps that we provide.
++	Builddeps []string
++}
++
++// builddepEntry holds one set of mappings for
++type builddepEntry struct {
++	Name       string
++	Pkgconfigs []string
++}
++
++// BuilddepMap holds the
++type BuilddepMap struct {
++	Dictionary []builddepEntry
 +}
 +
 +func filterPackages(names []string) []string {
@@ -42,6 +57,7 @@
 +			// Mark for exclusion if part of the list
 +			if exclude == name {
 +				shouldExclude = true
++				break
 +			}
 +		}
 +
@@ -79,10 +95,9 @@
 +}
 +
 +// List lists all packages in the current directory, with their information
-+func List() []SolusPackage {
++func List() map[string]SolusPackage {
 +
-+	var packageList []SolusPackage
-+
++	packageList := make(map[string]SolusPackage)
 +	for _, n := range ListNames() {
 +
 +		yamlData := PackageFile{}
@@ -97,11 +112,58 @@
 +			log.Fatalf("error: %v", err)
 +		}
 +
-+		packageList = append(packageList, SolusPackage{Name: n, Version: yamlData.Version, Release: yamlData.Release})
++		packageList[n] = SolusPackage{Name: n, Version: yamlData.Version, Release: yamlData.Release, Builddeps: interpretBuilddeps(yamlData.Builddeps)}
 +
 +	}
 +
 +	return packageList
++
++}
++
++func interpretBuilddeps(deps []string) []string {
++
++	var interpretted []string
++	var filtered []string
++
++	yamlData := BuilddepMap{}
++	yamlFile, err := ioutil.ReadFile("pkgconfig_dictionary.yml")
++
++	err = yaml.Unmarshal(yamlFile, &yamlData)
++	if err != nil {
++		log.Fatalf("error: %v", err)
++	}
++
++	for _, dep := range deps {
++		realdep := dep
++		for _, target := range yamlData.Dictionary {
++			for _, pkgconfig := range target.Pkgconfigs {
++
++				if "pkgconfig("+pkgconfig+")" == dep {
++					realdep = target.Name
++					break
++				}
++			}
++			if realdep != dep {
++				break
++			}
++		}
++
++		interpretted = append(interpretted, realdep)
++
++	}
++
++	packageList := ListNames()
++
++	for _, d := range interpretted {
++		for _, provided := range packageList {
++			if d == provided {
++				filtered = append(filtered, d)
++				break
++			}
++		}
++	}
++
++	return filtered
 +
 +}
 +
