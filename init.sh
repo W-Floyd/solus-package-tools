@@ -33,19 +33,18 @@ fi
 
 cobra init "${__package_full}"
 
-cobra add -t "${__package_full}" build
-
-cobra add -t "${__package_full}" git
+while read -r __command; do
+    cobra add -t "${__package_full}" "${__command}"
+done <<< 'build
+git
+list
+graph
+info
+bootstrap'
 
 cobra add -t "${__package_full}" -p gitCmd bump
 cobra add -t "${__package_full}" -p gitCmd upgrade
 cobra add -t "${__package_full}" -p gitCmd rebuild
-
-cobra add -t "${__package_full}" list
-
-cobra add -t "${__package_full}" graph
-
-cobra add -t "${__package_full}" info
 
 ################################################################################
 
