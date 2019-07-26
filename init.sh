@@ -38,12 +38,18 @@ if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
     rm -r ".${__package_name}"
 fi
 
+if ! [ -d "${__package_name}" ]; then
+    mkdir "${__package_name}"
+fi
+
 ################################################################################
 
-cobra init "${__package_full}"
+pushd "${__package_name}"
+
+cobra init --pkg-name "${__package_full}"
 
 while read -r __command; do
-    cobra add -t "${__package_full}" "${__command}"
+    cobra add "${__command}"
 done <<< 'build
 git
 list
@@ -51,9 +57,11 @@ graph
 info
 bootstrap'
 
-cobra add -t "${__package_full}" -p gitCmd bump
-cobra add -t "${__package_full}" -p gitCmd upgrade
-cobra add -t "${__package_full}" -p gitCmd rebuild
+cobra add -p gitCmd bump
+cobra add -p gitCmd upgrade
+cobra add -p gitCmd rebuild
+
+popd
 
 ################################################################################
 
@@ -64,7 +72,14 @@ if [ -d '.patches' ]; then
     pushd '.patches'
 
     find . -type f | while read -r __file; do
-        patch "../${__package_name}/${__file}" "${__file}"
+
+        if ! [ -d "../${__package_name}/$(dirname "${__file}")" ]; then
+            mkdir -p "../${__package_name}/$(dirname "${__file}")"
+        fi
+
+        touch "../${__package_name}/${__file}"
+
+        patch --ignore-whitespace "../${__package_name}/${__file}" "${__file}"
     done
 
     popd
