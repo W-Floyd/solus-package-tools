@@ -16,7 +16,7 @@ __package_full="${__package_path}/${__package_name}"
 
 if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
 
-    if ! [ -d '.patches' ]; then
+    if [ -d '.patches' ]; then
         rm -r '.patches'
     fi
 
