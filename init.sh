@@ -1,5 +1,14 @@
 #!/bin/bash
 
+while read -r __program; do
+    if ! which "${__program}" &> /dev/null; then
+        echo "Please install ${__program}"
+        exit 1
+    fi
+done <<< "cobra"
+
+################################################################################
+
 __package_name="solus-package-util"
 __package_path="github.com/W-Floyd/solus-package-tools"
 
