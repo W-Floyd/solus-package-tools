@@ -52,16 +52,16 @@ pushd "${__package_name}" 1> /dev/null
 
     while read -r __command; do
         cobra add "${__command}"
-    done <<< 'build
-git
-list
-graph
-info
-bootstrap'
+    done <<< 'build'
+#git
+#list
+#graph
+#info
+#bootstrap'
 
-    cobra add -p gitCmd bump
-    cobra add -p gitCmd upgrade
-    cobra add -p gitCmd rebuild
+    #cobra add -p gitCmd bump
+    #cobra add -p gitCmd upgrade
+    #cobra add -p gitCmd rebuild
 
 } 1> /dev/null
 
