@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,196 @@
+@@ -0,0 +1,197 @@
 +package packages
 +
 +import (
@@ -72,7 +72,8 @@
 +
 +}
 +
-+func fileIsPackage(f os.FileInfo) bool {
++// FileIsPackage checks if a given file is (or points to) a package directory
++func FileIsPackage(f os.FileInfo) bool {
 +
 +	// Try to read the package as a symlink
 +	target, err := os.Readlink(f.Name())
@@ -98,7 +99,7 @@
 +func List() map[string]SolusPackage {
 +
 +	packageList := make(map[string]SolusPackage)
-+	for _, n := range ListNames() {
++	for _, n := range ListNames("./") {
 +
 +		yamlData := PackageFile{}
 +		yamlFile, err := ioutil.ReadFile(n + "/package.yml")
@@ -152,7 +153,7 @@
 +
 +	}
 +
-+	packageList := ListNames()
++	packageList := ListNames("./")
 +
 +	for _, d := range interpretted {
 +		for _, provided := range packageList {
@@ -168,18 +169,18 @@
 +}
 +
 +// ListNames lists all package names in the current directory
-+func ListNames() []string {
++func ListNames(directory string) []string {
 +
 +	var filenames []string
 +	var packageNames []string
 +
-+	files, err := ioutil.ReadDir("./")
++	files, err := ioutil.ReadDir(directory)
 +	if err != nil {
 +		log.Fatal(err)
 +	}
 +
 +	for _, f := range files {
-+		if fileIsPackage(f) {
++		if FileIsPackage(f) {
 +			filenames = append(filenames, f.Name())
 +		}
 +	}

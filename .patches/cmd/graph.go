@@ -45,7 +45,7 @@
 +	Short:     "TODO",
 +	Long:      `TODO`,
 +	Args:      cobra.OnlyValidArgs,
-+	ValidArgs: packages.ListNames(),
++	ValidArgs: packages.ListNames("./"),
  	Run: func(cmd *cobra.Command, args []string) {
  		fmt.Println("graph called")
  	},
