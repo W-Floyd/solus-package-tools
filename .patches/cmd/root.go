@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,103 +1,28 @@
+@@ -1,103 +1,26 @@
 -/*
 -Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -
@@ -56,9 +56,7 @@
 -  //	Run: func(cmd *cobra.Command, args []string) { },
 +	Use:   "solus-package-util",
 +	Short: "A utility to manage the building of large unofficial package sets for Solus.",
-+	Long: `A utility to manage the building of large unofficial package sets for Solus.
-+
-+Specifically created for the development of the Deepin DE on Solus.`,
++	Long:  "A utility to manage the building of large unofficial package sets for Solus.",
  }
  
  // Execute adds all child commands to the root command and sets flags appropriately.

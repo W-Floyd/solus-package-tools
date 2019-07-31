@@ -45,8 +45,8 @@
 -This application is a tool to generate the needed files
 -to quickly create a Cobra application.`,
 +	Use:       "build",
-+	Short:     "TODO",
-+	Long:      `TODO`,
++	Short:     "Build a given set of packages",
++	Long:      `Builds a given set of packages.`,
 +	Args:      packages.InputCheckPackage,
 +	ValidArgs: packages.ListAllPackageDirectories("./"),
  	Run: func(cmd *cobra.Command, args []string) {
