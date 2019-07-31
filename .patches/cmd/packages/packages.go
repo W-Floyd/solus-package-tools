@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,279 @@
+@@ -0,0 +1,319 @@
 +package packages
 +
 +import (
@@ -250,6 +250,46 @@
 +	}
 +
 +	return rundepListFinal
++
++}
++
++// IsPackageFailed checks if a package has some failed deps such that it cannot build
++func IsPackageFailed(packageName string, state *map[string]SolusPackage) bool {
++
++	hasFailed := false
++
++	if (*state)[packageName].Failed {
++		hasFailed = true
++	}
++
++	for _, builddepName := range (*state)[packageName].Attributes.Builddeps {
++		if failedRecurse(builddepName, state) {
++			hasFailed = true
++			newvalue := (*state)[packageName]
++			newvalue.Failed = true
++			(*state)[packageName] = newvalue
++		}
++
++	}
++
++	return hasFailed
++
++}
++
++func failedRecurse(packageName string, state *map[string]SolusPackage) bool {
++
++	hasFailed := false
++
++	for _, rundepName := range RundepRecurse(packageName, state) {
++		if (*state)[rundepName].Failed {
++			hasFailed = true
++			newvalue := (*state)[packageName]
++			newvalue.Failed = true
++			(*state)[packageName] = newvalue
++		}
++	}
++
++	return hasFailed
 +
 +}
 +

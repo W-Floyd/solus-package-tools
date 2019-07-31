@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,142 @@
+@@ -0,0 +1,146 @@
 +package build
 +
 +import (
@@ -43,9 +43,13 @@
 +
 +func copyToCache(targetPackage string, state *map[string](packages.SolusPackage)) {
 +
++	log.Println("Building cache for " + targetPackage)
++
 +	fileList := make(map[string](packages.EopkgCopy))
 +
-+	for _, buildDep := range (*state)[targetPackage].Attributes.Builddeps {
++	for _, buildDep := range (*state)[packages.TestTrimmedName(targetPackage)].Attributes.Builddeps {
++
++		log.Println("foo")
 +
 +		directory := packages.TestTrimmedName(buildDep)
 +		filename := buildDep + "-" + (*state)[buildDep].Attributes.Version + "-" + strconv.Itoa((*state)[buildDep].Attributes.Release) + "-1-x86_64.eopkg"
@@ -60,7 +64,11 @@
 +		}
 +	}
 +
++	log.Println(fileList)
++
 +	for _, value := range fileList {
++
++		log.Println("Copying file " + value.Filename)
 +
 +		b, err := ioutil.ReadFile("./" + value.Directory + "/" + value.Filename)
 +		if err != nil {
@@ -81,7 +89,7 @@
 +
 +	fileList := make(map[string](packages.EopkgCopy))
 +
-+	for _, rundep := range (*state)[packageName].Attributes.Rundeps {
++	for _, rundep := range packages.RundepRecurse(packageName, state) {
 +
 +		directory := packages.TestTrimmedName(rundep)
 +		filename := rundep + "-" + (*state)[rundep].Attributes.Version + "-" + strconv.Itoa((*state)[rundep].Attributes.Release) + "-1-x86_64.eopkg"
@@ -89,10 +97,6 @@
 +		fileList[rundep] = packages.EopkgCopy{
 +			Filename:  filename,
 +			Directory: directory,
-+		}
-+
-+		for key, value := range listRundepRecurse(rundep, state) {
-+			fileList[key] = value
 +		}
 +
 +	}
@@ -105,7 +109,7 @@
 +
 +	var cmd *exec.Cmd
 +
-+	if len((*state)[targetPackage].Attributes.Builddeps) > 0 {
++	if len((*state)[packages.TestTrimmedName(targetPackage)].Attributes.Builddeps) > 0 {
 +
 +		cmd = exec.Command("make", "local")
 +

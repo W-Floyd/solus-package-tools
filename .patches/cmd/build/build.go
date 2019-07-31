@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,73 @@
 +package build
 +
 +import (
@@ -19,6 +19,10 @@
 +		newQueue := []string{}
 +
 +		for _, targetPackage := range *buildQueue {
++
++			if globalState[targetPackage].Built || packages.IsPackageFailed(targetPackage, &globalState) {
++				continue
++			}
 +
 +			for _, builddep := range globalState[targetPackage].Attributes.Builddeps {
 +				newQueue = append(newQueue, builddep)
@@ -64,7 +68,6 @@
 +
 +func checkBuildQueueForBuildability(queue []string, state *map[string]packages.SolusPackage) bool {
 +	for _, targetPackage := range queue {
-+		fmt.Println("Checking " + targetPackage)
 +		if packages.IsPackageBuildable(targetPackage, state) {
 +			return true
 +		}
