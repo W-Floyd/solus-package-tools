@@ -8,8 +8,12 @@
         "devel",
         "dtkwm",
         "gmail",
+        "list",
         "mitchellh",
         "pisi",
-        "rundeps"
+        "recurse",
+        "rundep",
+        "rundeps",
+        "yamldata"
     ]
 }
