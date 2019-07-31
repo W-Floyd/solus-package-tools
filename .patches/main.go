@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,24 +1,3 @@
+@@ -1,28 +1,7 @@
 -/*
 -Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -
@@ -25,3 +25,8 @@
  package main
  
  import "github.com/W-Floyd/solus-package-tools/solus-package-util/cmd"
+ 
+ func main() {
+-  cmd.Execute()
++	cmd.Execute()
+ }
