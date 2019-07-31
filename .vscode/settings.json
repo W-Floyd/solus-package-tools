@@ -3,5 +3,12 @@
         "Builddeps",
         "Eopkg",
         "deps"
+    ],
+    "cSpell.ignoreWords": [
+        "devel",
+        "dtkwm",
+        "gmail",
+        "mitchellh",
+        "rundeps"
     ]
 }

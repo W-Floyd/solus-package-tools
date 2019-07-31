@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,197 @@
+@@ -0,0 +1,205 @@
 +package packages
 +
 +import (
@@ -13,34 +13,6 @@
 +	"github.com/spf13/cobra"
 +	"gopkg.in/yaml.v3"
 +)
-+
-+// PackageFile holds all information for a package, as parsed from YAML
-+type PackageFile struct {
-+	Name      string
-+	Version   string
-+	Release   int
-+	Builddeps []string
-+}
-+
-+// SolusPackage holds all information related to a package
-+type SolusPackage struct {
-+	Name    string
-+	Version string
-+	Release int
-+	// Builddeps are really only the builddeps that we provide.
-+	Builddeps []string
-+}
-+
-+// builddepEntry holds one set of mappings for
-+type builddepEntry struct {
-+	Name       string
-+	Pkgconfigs []string
-+}
-+
-+// BuilddepMap holds the
-+type BuilddepMap struct {
-+	Dictionary []builddepEntry
-+}
 +
 +func filterPackages(names []string) []string {
 +
@@ -75,14 +47,6 @@
 +// FileIsPackage checks if a given file is (or points to) a package directory
 +func FileIsPackage(f os.FileInfo) bool {
 +
-+	// Try to read the package as a symlink
-+	target, err := os.Readlink(f.Name())
-+
-+	// If it is a symlink, change the file to point to the symlink target
-+	if err == nil {
-+		f, _ = os.Lstat(target)
-+	}
-+
 +	// If it is a directory, and does not start with `.`
 +	if !strings.HasPrefix(f.Name(), ".") && f.IsDir() {
 +
@@ -95,36 +59,54 @@
 +	return false
 +}
 +
-+// List lists all packages in the current directory, with their information
-+func List() map[string]SolusPackage {
++// GetState will return a current and complete state of the packages both built and known
++// This includes both .eopkg files, and .yaml files. When a .eopkg file is found, it takes precedence.
++// .eopkg results are cached on disk and tied to the hash of the file providing the information.
++// When a current .eopkg file is found in a package directory, an packages of the correct build number shall be checked for state.
++//
++// Eg. If dtkwm has `dtkwm` and `dtkwm-devel` .eopkg files, they will be added separately to the state.
++// But if dtkwm is not yet built, only, `dtkwm` will make it into the state.
++func GetState() map[string]SolusPackage {
 +
-+	packageList := make(map[string]SolusPackage)
-+	for _, n := range ListNames("./") {
++	state := make(map[string]SolusPackage)
 +
-+		yamlData := PackageFile{}
-+		yamlFile, err := ioutil.ReadFile(n + "/package.yml")
++	for _, n := range ListAllPackageDirectories("./") {
 +
-+		if err != nil {
-+			log.Fatalf("error: %v", err)
++		if packageIsBuilt(n) {
++			for k, v := range getEeopkgState(n) {
++				state[k] = SolusPackage{Attributes: v, Built: true}
++			}
++		} else {
++			state[n] = SolusPackage{Attributes: getYAMLState(n), Built: false}
 +		}
-+
-+		err = yaml.Unmarshal(yamlFile, &yamlData)
-+		if err != nil {
-+			log.Fatalf("error: %v", err)
-+		}
-+
-+		packageList[n] = SolusPackage{Name: n, Version: yamlData.Version, Release: yamlData.Release, Builddeps: interpretBuilddeps(yamlData.Builddeps)}
-+
 +	}
 +
-+	return packageList
-+
++	return state
 +}
 +
-+func interpretBuilddeps(deps []string) []string {
++func getYAMLState(packageName string) PackageFile {
++
++	yamlData := PackageFile{}
++
++	yamlFile, err := ioutil.ReadFile(packageName + "/package.yml")
++
++	if err != nil {
++		println(packageName)
++		log.Fatalf("error: %v", err)
++	}
++
++	err = yaml.Unmarshal(yamlFile, &yamlData)
++	if err != nil {
++		println(packageName)
++		log.Fatalf("error: %v", err)
++	}
++
++	return PackageFile{Name: packageName, Version: yamlData.Version, Release: yamlData.Release, Builddeps: interpretDeps(yamlData.Builddeps), Rundeps: interpretDeps(yamlData.Rundeps)}
++}
++
++func interpretDeps(deps []string) []string {
 +
 +	var interpretted []string
-+	var filtered []string
 +
 +	yamlData := BuilddepMap{}
 +	yamlFile, err := ioutil.ReadFile("pkgconfig_dictionary.yml")
@@ -153,13 +135,15 @@
 +
 +	}
 +
-+	packageList := ListNames("./")
++	packageList := ListAllPackageDirectories("./")
++
++	filtered := []string{}
 +
 +	for _, d := range interpretted {
++		trimmedName := testTrimmedName(d)
 +		for _, provided := range packageList {
-+			if d == provided {
++			if trimmedName == provided {
 +				filtered = append(filtered, d)
-+				break
 +			}
 +		}
 +	}
@@ -168,8 +152,32 @@
 +
 +}
 +
-+// ListNames lists all package names in the current directory
-+func ListNames(directory string) []string {
++func packageNameTrimmer(packageName string) (nameCandidates []string) {
++
++	// TODO: Track down a definitive list of patterns to work with.
++	trimList := [...]string{
++		"-devel",
++		"-doc",
++	}
++	for _, suffix := range trimList {
++		nameCandidates = append(nameCandidates, strings.TrimSuffix(packageName, suffix))
++	}
++
++	return nameCandidates
++
++}
++
++func testTrimmedName(packageName string) string {
++	for _, trimmedName := range packageNameTrimmer(packageName) {
++		if trimmedName != packageName {
++			return trimmedName
++		}
++	}
++	return packageName
++}
++
++// ListAllPackageDirectories lists all package directory names in the current directory
++func ListAllPackageDirectories(directory string) []string {
 +
 +	var filenames []string
 +	var packageNames []string

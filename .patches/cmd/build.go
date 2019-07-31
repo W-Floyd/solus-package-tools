@@ -1,6 +1,6 @@
 ---
 +++
-@@ -1,42 +1,19 @@
+@@ -1,57 +1,26 @@
 -/*
 -Copyright © 2019 William Floyd <william.png2000@gmail.com>
 -
@@ -25,12 +25,15 @@
  package cmd
  
  import (
- 	"fmt"
- 
+-	"fmt"
+-
++	"github.com/W-Floyd/solus-package-tools/solus-package-util/cmd/build"
 +	"github.com/W-Floyd/solus-package-tools/solus-package-util/cmd/packages"
  	"github.com/spf13/cobra"
  )
  
++var buildQueue []string
++
  // buildCmd represents the build command
  var buildCmd = &cobra.Command{
 -	Use:   "build",
@@ -45,11 +48,13 @@
 +	Short:     "TODO",
 +	Long:      `TODO`,
 +	Args:      packages.InputCheckPackage,
-+	ValidArgs: packages.ListNames("./"),
++	ValidArgs: packages.ListAllPackageDirectories("./"),
  	Run: func(cmd *cobra.Command, args []string) {
- 		fmt.Println("build called")
+-		fmt.Println("build called")
++		buildQueue = args
++		build.ProcessQueue(&buildQueue)
  	},
-@@ -44,14 +21,4 @@
+ }
  
  func init() {
  	rootCmd.AddCommand(buildCmd)
