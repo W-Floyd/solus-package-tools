@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,60 @@
+@@ -0,0 +1,67 @@
 +package packages
 +
 +import "encoding/xml"
@@ -18,6 +18,7 @@
 +type SolusPackage struct {
 +	Attributes PackageFile
 +	Built      bool
++	Failed     bool
 +}
 +
 +// builddepEntry holds one set of mappings for
@@ -31,18 +32,9 @@
 +	Dictionary []builddepEntry
 +}
 +
-+// GlobalState holds the overall state of the whole of the repository, including things such as whether a package is currently built or not.
-+type GlobalState struct {
-+	Packages []packageState
-+}
-+
-+type packageState struct {
-+	PackageValues PackageFile
-+}
-+
 +////////////////////////////////////////////////////////////////////////////////
 +
-+// Eopkg holds the structure of a .eopkg file from XML
++// Eopkg holds the important parts of the structure of a .eopkg file from XML
 +type Eopkg struct {
 +	XMLName xml.Name     `xml:"PISI"`
 +	Package eopkgPackage `xml:"Package"`
@@ -60,4 +52,19 @@
 +	XMLName xml.Name `xml:"Update"`
 +	Release string   `xml:"release,attr"`
 +	Version string   `xml:"Version"`
++}
++
++////////////////////////////////////////////////////////////////////////////////
++
++// PackageCache holds a map of package information, as indexed by the hash of the referenced file.
++type PackageCache struct {
++	Packages map[string]PackageFile
++}
++
++////////////////////////////////////////////////////////////////////////////////
++
++// EopkgCopy holds information for when we transfer files to eopkg cache
++type EopkgCopy struct {
++	Filename  string
++	Directory string
 +}

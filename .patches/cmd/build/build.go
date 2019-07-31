@@ -1,46 +1,71 @@
 ---
 +++
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,70 @@
 +package build
 +
 +import (
-+	"encoding/json"
 +	"fmt"
 +
 +	"github.com/W-Floyd/solus-package-tools/solus-package-util/cmd/packages"
 +)
 +
-+var packageState = packages.GetState()
++var globalState = packages.GetState()
 +
 +// ProcessQueue takes a reference to a process queue and iterates through it until it's empty
 +func ProcessQueue(buildQueue *[]string) {
 +
-+	/* 	for len(*buildQueue) > 0 {
++	for len(*buildQueue) > 0 {
 +
-+		newQueue := *buildQueue
++		newQueue := []string{}
 +
 +		for _, targetPackage := range *buildQueue {
 +
-+			fmt.Println(targetPackage)
-+			packageState = packages.GetState()
++			for _, builddep := range globalState[targetPackage].Attributes.Builddeps {
++				newQueue = append(newQueue, builddep)
++				newQueue = append(newQueue, packages.RundepRecurse(builddep, &globalState)...)
++			}
++
++			if !packages.IsPackageBuildable(targetPackage, &globalState) {
++				newQueue = append(newQueue, targetPackage)
++				//fmt.Println(targetPackage + " is unbuildable.")
++				continue
++			}
++
++			buildPrepare(targetPackage, &globalState)
++			solbuildOffload(targetPackage, &globalState)
 +
 +		}
 +
 +		*buildQueue = newQueue
 +
-+	} */
++		if !checkBuildQueueForBuildability(*buildQueue, &globalState) {
++			fmt.Println("Queue is unbuildable")
++			/* 			for _, dep := range globalState {
++				json, _ := json.Marshal(dep)
++				fmt.Println(string(json))
++			} */
++			break
++		}
 +
-+	packageState = packages.GetState()
++	}
 +
-+	json, _ := json.Marshal(packageState)
-+
-+	fmt.Println(string(json))
++	packages.WritePackageCache(&packages.PackageCacheStore)
 +
 +}
 +
 +func stringInSlice(a string, list []string) bool {
 +	for _, b := range list {
 +		if b == a {
++			return true
++		}
++	}
++	return false
++}
++
++func checkBuildQueueForBuildability(queue []string, state *map[string]packages.SolusPackage) bool {
++	for _, targetPackage := range queue {
++		fmt.Println("Checking " + targetPackage)
++		if packages.IsPackageBuildable(targetPackage, state) {
 +			return true
 +		}
 +	}

@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,210 @@
+@@ -0,0 +1,279 @@
 +package packages
 +
 +import (
@@ -86,6 +86,12 @@
 +
 +func getYAMLState(packageName string) PackageFile {
 +
++	hash := hashFile(packageName + "/package.yml")
++
++	if val, ok := PackageCacheStore.Packages[hash]; ok {
++		return val
++	}
++
 +	yamlData := PackageFile{}
 +
 +	yamlFile, err := ioutil.ReadFile(packageName + "/package.yml")
@@ -101,12 +107,16 @@
 +		log.Fatalf("error: %v", err)
 +	}
 +
-+	return PackageFile{
++	foundPackage := PackageFile{
 +		Name:      packageName,
 +		Version:   yamlData.Version,
 +		Release:   yamlData.Release,
 +		Builddeps: interpretDeps(yamlData.Builddeps),
 +		Rundeps:   interpretDeps(yamlData.Rundeps)}
++
++	PackageCacheStore.Packages[hash] = foundPackage
++
++	return foundPackage
 +}
 +
 +func interpretDeps(deps []string) []string {
@@ -145,7 +155,7 @@
 +	filtered := []string{}
 +
 +	for _, d := range interpretted {
-+		trimmedName := testTrimmedName(d)
++		trimmedName := TestTrimmedName(d)
 +		for _, provided := range packageList {
 +			if trimmedName == provided {
 +				filtered = append(filtered, d)
@@ -172,7 +182,8 @@
 +
 +}
 +
-+func testTrimmedName(packageName string) string {
++// TestTrimmedName returns what it believes to be the correct trimmed version of the package name
++func TestTrimmedName(packageName string) string {
 +	for _, trimmedName := range packageNameTrimmer(packageName) {
 +		if trimmedName != packageName {
 +			return trimmedName
@@ -202,6 +213,64 @@
 +
 +	return packageNames
 +
++}
++
++func rundepsBuilt(packageName string, state *map[string]SolusPackage) bool {
++
++	for _, rundepName := range RundepRecurse(packageName, state) {
++		if !(*state)[rundepName].Built {
++			return false
++		}
++
++	}
++
++	return true
++
++}
++
++func RundepRecurse(packageName string, state *map[string]SolusPackage) []string {
++
++	var rundepList []string
++
++	for _, rundepName := range (*state)[packageName].Attributes.Rundeps {
++		rundepList = append(rundepList, rundepName)
++		rundepList = append(rundepList, RundepRecurse(rundepName, state)...)
++	}
++
++	visited := make(map[string]bool)
++
++	for _, rundepName := range rundepList {
++		visited[rundepName] = true
++	}
++
++	var rundepListFinal []string
++
++	for key := range visited {
++		rundepListFinal = append(rundepListFinal, key)
++	}
++
++	return rundepListFinal
++
++}
++
++func builddepsBuilt(packageName string, state *map[string]SolusPackage) bool {
++
++	for _, builddepName := range (*state)[packageName].Attributes.Builddeps {
++		if !(*state)[builddepName].Built {
++			return false
++		}
++	}
++
++	return true
++
++}
++
++// IsPackageBuildable checks if a package is buildable, by checking if all builddeps are built, and if all rundeps (recursive) are built
++func IsPackageBuildable(packageName string, state *map[string]SolusPackage) bool {
++	if !rundepsBuilt(packageName, state) || !builddepsBuilt(packageName, state) {
++		return false
++	}
++	return true
 +}
 +
 +// InputCheckPackage determines whether at least one valid package has been provided

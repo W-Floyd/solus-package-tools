@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,99 @@
+@@ -0,0 +1,111 @@
 +package packages
 +
 +import (
@@ -23,20 +23,32 @@
 +
 +	for _, fileName := range listCurrentEopkgFiles(packageName) {
 +
-+		xmlData := getEopkgFileAttributes(fileName, packageName)
++		hash := hashFile("./" + packageName + "/" + fileName)
 +
-+		xmlDataParsed := Eopkg{}
++		if val, ok := PackageCacheStore.Packages[hash]; ok {
++			packages[PackageCacheStore.Packages[hash].Name] = val
++		} else {
 +
-+		xml.Unmarshal(xmlData, &xmlDataParsed)
++			xmlData := getEopkgFileAttributes(fileName, packageName)
 +
-+		release, _ := strconv.Atoi(xmlDataParsed.Package.History[0].Release)
++			xmlDataParsed := Eopkg{}
 +
-+		packages[xmlDataParsed.Package.Name] = PackageFile{
-+			Name:      xmlDataParsed.Package.Name,
-+			Version:   xmlDataParsed.Package.History[0].Version,
-+			Release:   release,
-+			Rundeps:   interpretDeps(xmlDataParsed.Package.RuntimeDependencies),
-+			Builddeps: yamlData.Builddeps}
++			xml.Unmarshal(xmlData, &xmlDataParsed)
++
++			release, _ := strconv.Atoi(xmlDataParsed.Package.History[0].Release)
++
++			foundPackage := PackageFile{
++				Name:      xmlDataParsed.Package.Name,
++				Version:   xmlDataParsed.Package.History[0].Version,
++				Release:   release,
++				Rundeps:   interpretDeps(xmlDataParsed.Package.RuntimeDependencies),
++				Builddeps: yamlData.Builddeps}
++
++			PackageCacheStore.Packages[hash] = foundPackage
++
++			packages[xmlDataParsed.Package.Name] = foundPackage
++
++		}
 +
 +	}
 +
