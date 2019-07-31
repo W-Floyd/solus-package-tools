@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,99 @@
 +package packages
 +
 +import (
@@ -31,7 +31,12 @@
 +
 +		release, _ := strconv.Atoi(xmlDataParsed.Package.History[0].Release)
 +
-+		packages[xmlDataParsed.Package.Name] = PackageFile{Name: xmlDataParsed.Package.Name, Version: xmlDataParsed.Package.History[0].Version, Release: release, Rundeps: interpretDeps(xmlDataParsed.Package.RuntimeDependencies), Builddeps: yamlData.Builddeps}
++		packages[xmlDataParsed.Package.Name] = PackageFile{
++			Name:      xmlDataParsed.Package.Name,
++			Version:   xmlDataParsed.Package.History[0].Version,
++			Release:   release,
++			Rundeps:   interpretDeps(xmlDataParsed.Package.RuntimeDependencies),
++			Builddeps: yamlData.Builddeps}
 +
 +	}
 +

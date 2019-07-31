@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,205 @@
+@@ -0,0 +1,210 @@
 +package packages
 +
 +import (
@@ -101,7 +101,12 @@
 +		log.Fatalf("error: %v", err)
 +	}
 +
-+	return PackageFile{Name: packageName, Version: yamlData.Version, Release: yamlData.Release, Builddeps: interpretDeps(yamlData.Builddeps), Rundeps: interpretDeps(yamlData.Rundeps)}
++	return PackageFile{
++		Name:      packageName,
++		Version:   yamlData.Version,
++		Release:   yamlData.Release,
++		Builddeps: interpretDeps(yamlData.Builddeps),
++		Rundeps:   interpretDeps(yamlData.Rundeps)}
 +}
 +
 +func interpretDeps(deps []string) []string {
