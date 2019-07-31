@@ -45,18 +45,18 @@
 +// Eopkg holds the structure of a .eopkg file from XML
 +type Eopkg struct {
 +	XMLName xml.Name     `xml:"PISI"`
-+	Package EopkgPackage `xml:"Package"`
++	Package eopkgPackage `xml:"Package"`
 +}
 +
-+type EopkgPackage struct {
++type eopkgPackage struct {
 +	XMLName xml.Name `xml:"Package"`
 +	Name    string   `xml:"Name"`
 +
 +	RuntimeDependencies []string      `xml:"RuntimeDependencies>Dependency"`
-+	History             []EopkgUpdate `xml:"History>Update"`
++	History             []eopkgUpdate `xml:"History>Update"`
 +}
 +
-+type EopkgUpdate struct {
++type eopkgUpdate struct {
 +	XMLName xml.Name `xml:"Update"`
 +	Release string   `xml:"release,attr"`
 +	Version string   `xml:"Version"`
