@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,75 @@
 +package build
 +
 +import (
@@ -37,6 +37,8 @@
 +
 +			buildPrepare(targetPackage, &globalState)
 +			solbuildOffload(targetPackage, &globalState)
++
++			globalState = packages.GetState()
 +
 +		}
 +

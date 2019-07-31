@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,146 @@
+@@ -0,0 +1,144 @@
 +package build
 +
 +import (
@@ -48,8 +48,6 @@
 +	fileList := make(map[string](packages.EopkgCopy))
 +
 +	for _, buildDep := range (*state)[packages.TestTrimmedName(targetPackage)].Attributes.Builddeps {
-+
-+		log.Println("foo")
 +
 +		directory := packages.TestTrimmedName(buildDep)
 +		filename := buildDep + "-" + (*state)[buildDep].Attributes.Version + "-" + strconv.Itoa((*state)[buildDep].Attributes.Release) + "-1-x86_64.eopkg"
