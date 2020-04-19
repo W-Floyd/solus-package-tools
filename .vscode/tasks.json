@@ -8,12 +8,13 @@
             "type": "shell",
             "command": "cd solus-package-tools && go install",
             "group": {
-                "kind": "test",
+                "kind": "build",
                 "isDefault": true
             },
             "presentation": {
                 "reveal": "never"
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }
