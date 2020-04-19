@@ -6,7 +6,8 @@ while read -r __program; do
         exit 1
     fi
 done <<< "cobra
-patch"
+patch
+diff"
 
 ################################################################################
 
