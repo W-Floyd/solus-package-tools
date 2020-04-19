@@ -2,7 +2,7 @@
 +++
 @@ -1,103 +1,64 @@
 -/*
--Copyright © 2019 William Floyd <william.png2000@gmail.com>
+-Copyright © 2020 William Floyd <william.png2000@gmail.com>
 -
 -Permission is hereby granted, free of charge, to any person obtaining a copy
 -of this software and associated documentation files (the "Software"), to deal
