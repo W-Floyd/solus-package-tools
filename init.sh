@@ -16,6 +16,9 @@ __package_path="github.com/W-Floyd/solus-package-tools"
 
 __package_full="${__package_path}/${__package_name}"
 
+__package_author="William Floyd <william.png2000@gmail.com."
+__package_license="MIT"
+
 if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
 
     if [ -d '.patches' ]; then
@@ -50,10 +53,10 @@ pushd "${__package_name}" 1> /dev/null
 
 {
 
-    cobra init --pkg-name "${__package_full}"
+    cobra -a "${__package_author}" -l "${__package_license}" init --pkg-name "${__package_full}"
 
     while read -r __command; do
-        cobra add "${__command}"
+        cobra add "${__command}" -a "${__package_author}" -l "${__package_license}"
     done <<< 'build
 git
 list
@@ -61,9 +64,9 @@ graph
 info
 bootstrap'
 
-    cobra add -p gitCmd bump
-    cobra add -p gitCmd upgrade
-    cobra add -p gitCmd rebuild
+    cobra -a "${__package_author}" -l "${__package_license}" add -p gitCmd bump
+    cobra -a "${__package_author}" -l "${__package_license}" add -p gitCmd upgrade
+    cobra -a "${__package_author}" -l "${__package_license}" add -p gitCmd rebuild
 
 } 1> /dev/null
 
