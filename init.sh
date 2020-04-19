@@ -5,11 +5,12 @@ while read -r __program; do
         echo "Please install ${__program}"
         exit 1
     fi
-done <<< "cobra"
+done <<< "cobra
+patch"
 
 ################################################################################
 
-__package_name="solus-package-util"
+__package_name="solus-package-tools"
 __package_path="github.com/W-Floyd/solus-package-tools"
 
 __package_full="${__package_path}/${__package_name}"
