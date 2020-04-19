@@ -27,7 +27,7 @@
  import (
  	"fmt"
  
-+	"github.com/W-Floyd/solus-package-tools/solus-package-util/cmd/packages"
++	"github.com/W-Floyd/solus-package-tools/solus-package-tools/cmd/packages"
  	"github.com/spf13/cobra"
  )
  

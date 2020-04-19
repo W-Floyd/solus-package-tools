@@ -45,7 +45,7 @@
 -
 -// rootCmd represents the base command when called without any subcommands
  var rootCmd = &cobra.Command{
--  Use:   "solus-package-util",
+-  Use:   "solus-package-tools",
 -  Short: "A brief description of your application",
 -  Long: `A longer description that spans multiple lines and likely contains
 -examples and usage of using your application. For example:
@@ -56,7 +56,7 @@
 -  // Uncomment the following line if your bare application
 -  // has an action associated with it:
 -  //	Run: func(cmd *cobra.Command, args []string) { },
-+	Use:   "solus-package-util",
++	Use:   "solus-package-tools",
 +	Short: "A utility to manage the building of large unofficial package sets for Solus.",
 +	Long: `A utility to manage the building of large unofficial package sets for Solus.
 +
@@ -83,9 +83,9 @@
 -  // Here you will define your flags and configuration settings.
 -  // Cobra supports persistent flags, which, if defined here,
 -  // will be global for your application.
-+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-util.yaml)")
++	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-tools.yaml)")
  
--  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-util.yaml)")
+-  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-tools.yaml)")
 -
 -
 -  // Cobra also supports local flags, which will only run
@@ -108,9 +108,9 @@
 -      os.Exit(1)
 -    }
 -
--    // Search config in home directory with name ".solus-package-util" (without extension).
+-    // Search config in home directory with name ".solus-package-tools" (without extension).
 -    viper.AddConfigPath(home)
--    viper.SetConfigName(".solus-package-util")
+-    viper.SetConfigName(".solus-package-tools")
 -  }
 -
 -  viper.AutomaticEnv() // read in environment variables that match
@@ -130,9 +130,9 @@
 +			os.Exit(1)
 +		}
 +
-+		// Search config in home directory with name ".solus-package-util" (without extension).
++		// Search config in home directory with name ".solus-package-tools" (without extension).
 +		viper.AddConfigPath(home)
-+		viper.SetConfigName(".solus-package-util")
++		viper.SetConfigName(".solus-package-tools")
 +	}
 +
 +	viper.AutomaticEnv() // read in environment variables that match

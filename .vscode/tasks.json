@@ -6,7 +6,7 @@
         {
             "label": "Build & Install",
             "type": "shell",
-            "command": "cd solus-package-util && go install",
+            "command": "cd solus-package-tools && go install",
             "group": {
                 "kind": "test",
                 "isDefault": true

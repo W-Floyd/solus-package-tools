@@ -24,4 +24,4 @@
 -*/
  package main
  
- import "github.com/W-Floyd/solus-package-tools/solus-package-util/cmd"
+ import "github.com/W-Floyd/solus-package-tools/solus-package-tools/cmd"
