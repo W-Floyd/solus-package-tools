@@ -96,10 +96,10 @@ fi
 
 ################################################################################
 
-pushd "${__package_name}" 1>/dev/null
+#pushd "${__package_name}" 1>/dev/null
 
-go build -o ~/go/bin/${__package_name}
+#go build -o ~/go/bin/${__package_name}
 
-popd 1>/dev/null
+#popd 1>/dev/null
 
 exit
