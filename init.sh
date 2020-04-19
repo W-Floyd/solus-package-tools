@@ -62,11 +62,8 @@ pushd "${__package_name}" 1>/dev/null
     while read -r __command; do
         __cobra add "${__command}"
     done <<<'build
-git
 list
-graph
-info
-bootstrap'
+info'
 
     goreturns -w ./
 
