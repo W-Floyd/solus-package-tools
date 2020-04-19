@@ -16,7 +16,7 @@ __package_path="github.com/W-Floyd/solus-package-tools"
 
 __package_full="${__package_path}/${__package_name}"
 
-__package_author="William Floyd <william.png2000@gmail.com."
+__package_author="William Floyd <william.png2000@gmail.com>"
 __package_license="MIT"
 
 if [ -d "${__package_name}" ] && [ -d ".${__package_name}" ]; then
