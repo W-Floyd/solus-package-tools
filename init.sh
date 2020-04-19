@@ -60,7 +60,7 @@ pushd "${__package_name}" 1>/dev/null
     __cobra init --pkg-name "${__package_full}"
 
     while read -r __command; do
-        __cobra -l "${__package_license}"
+        __cobra add "${__command}"
     done <<<'build
 git
 list
