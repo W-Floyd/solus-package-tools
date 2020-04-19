@@ -68,6 +68,8 @@ graph
 info
 bootstrap'
 
+    goreturns -w solus-package-tools
+
 } 1>/dev/null
 
 popd 1>/dev/null
