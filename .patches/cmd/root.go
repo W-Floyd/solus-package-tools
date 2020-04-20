@@ -20,3 +20,20 @@
  }
  
  // Execute adds all child commands to the root command and sets flags appropriately.
+@@ -64,7 +57,7 @@
+ 	// Cobra supports persistent flags, which, if defined here,
+ 	// will be global for your application.
+ 
+-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-tools.yaml)")
++	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.solus-package-tools.yaml and ./.solus-package-tools.yaml)")
+ 
+ 	// Cobra also supports local flags, which will only run
+ 	// when this action is called directly.
+@@ -86,6 +79,7 @@
+ 
+ 		// Search config in home directory with name ".solus-package-tools" (without extension).
+ 		viper.AddConfigPath(home)
++		viper.AddConfigPath("./")
+ 		viper.SetConfigName(".solus-package-tools")
+ 	}
+ 
