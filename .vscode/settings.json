@@ -5,6 +5,7 @@
         "eopkg",
         "goxml",
         "json",
+        "libeopkg",
         "mholt",
         "mitchellh"
     ]
