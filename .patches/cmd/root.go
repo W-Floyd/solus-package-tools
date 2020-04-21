@@ -29,11 +29,19 @@
  
  	// Cobra also supports local flags, which will only run
  	// when this action is called directly.
-@@ -86,6 +79,7 @@
+@@ -86,13 +79,12 @@
  
  		// Search config in home directory with name ".solus-package-tools" (without extension).
  		viper.AddConfigPath(home)
-+		viper.AddConfigPath("./")
++		viper.AddConfigPath(".")
  		viper.SetConfigName(".solus-package-tools")
  	}
  
+ 	viper.AutomaticEnv() // read in environment variables that match
+ 
+ 	// If a config file is found, read it in.
+-	if err := viper.ReadInConfig(); err == nil {
+-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+-	}
++	viper.ReadInConfig()
+ }
