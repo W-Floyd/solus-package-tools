@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,64 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -25,82 +25,43 @@
 +package eopkg
 +
 +import (
-+	"archive/zip"
-+	"bytes"
-+	jsonreal "encoding/json"
++	"encoding/json"
 +	"fmt"
 +	"log"
 +
-+	xj "github.com/basgys/goxml2json"
++	"github.com/getsolus/libeopkg"
 +)
 +
-+// extractMetaDataXML streams the metadata XML file from the archive
-+func extractMetaDataXML(fileName string) (metadata *bytes.Buffer, err error) {
-+
-+	r, err := zip.OpenReader(fileName)
++func extractMetaData(filename string) (metadata *libeopkg.Metadata, err error) {
++	pkg, err := libeopkg.Open(filename)
 +
 +	if err != nil {
-+		log.Fatal(err)
++		return metadata, err
 +	}
 +
-+	defer r.Close()
-+
-+	for _, f := range r.File {
-+
-+		if f.Name == "metadata.xml" {
-+
-+			xml, err := f.Open()
-+
-+			if err != nil {
-+				log.Fatal(err)
-+			}
-+
-+			buf := new(bytes.Buffer)
-+
-+			buf.ReadFrom(xml)
-+
-+			xml.Close()
-+
-+			return buf, nil
-+
-+		}
-+	}
-+
-+	return metadata, fmt.Errorf("zip: metadata not found in file %s", fileName)
-+
-+}
-+
-+func extractMetaDataJSON(filename string) (metadata *bytes.Buffer, err error) {
-+	r, err := extractMetaDataXML(filename)
++	err = pkg.ReadMetadata()
 +
 +	if err != nil {
-+		log.Fatal(err)
++		return metadata, err
 +	}
 +
-+	json, err := xj.Convert(r)
-+
-+	if err != nil {
-+		log.Fatal(err)
-+	}
-+
-+	return json, nil
++	return pkg.Meta, nil
 +}
 +
 +// PrintMetaDataJSON prints a pretty JSON output of a package metadata
 +func PrintMetaDataJSON(filename string) {
-+	r, err := extractMetaDataJSON(filename)
++	metadata, err := extractMetaData(filename)
 +
 +	if err != nil {
 +		log.Fatal(err)
 +	}
 +
-+	var prettyJSON bytes.Buffer
-+	err = jsonreal.Indent(&prettyJSON, r.Bytes(), "", "\t")
++	prettyJSON, err := json.MarshalIndent(*metadata, "", "\t")
 +
 +	if err != nil {
 +		log.Fatal(err)
 +	}
 +
-+	fmt.Print(prettyJSON.String())
++	fmt.Print(string(prettyJSON))
 +
 +}
