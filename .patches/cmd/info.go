@@ -21,7 +21,7 @@
 -This application is a tool to generate the needed files
 -to quickly create a Cobra application.`,
 +	Short: "Extracts and displays JSON metadata for a .eopkg file",
-+	Long:  `AExtracts and displays JSON metadata for a .eopkg file`,
++	Long:  `Extracts and displays JSON metadata for a .eopkg file`,
  	Run: func(cmd *cobra.Command, args []string) {
 -		fmt.Println("info called")
 +		for _, input := range args {
