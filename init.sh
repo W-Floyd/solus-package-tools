@@ -67,7 +67,7 @@ pushd "${__package_name}" 1>/dev/null
         __cobra add -p infoCmd "${__subcommand}"
     done <<<'provides'
 
-    goreturns -w ./
+    goreturns -i -w ./
 
 } 1>/dev/null
 
