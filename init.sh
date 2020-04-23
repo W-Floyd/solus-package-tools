@@ -64,9 +64,9 @@ pushd "${__package_name}" 1>/dev/null
         __cobra add "${__command}"
     done <<<'info'
 
-    while read -r __subcommand; do
-        __cobra add -p infoCmd "${__subcommand}"
-    done <<<'provides'
+    # while read -r __subcommand; do
+    #     __cobra add -p infoCmd "${__subcommand}"
+    # done <<<'provides'
 
     goreturns -i -w ./
 
