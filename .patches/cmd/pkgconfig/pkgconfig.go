@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,146 @@
+@@ -0,0 +1,181 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -146,4 +146,39 @@
 +	if newEntry.EopkgFile != nil {
 +		Dictionary.Packages[pName] = newEntry
 +	}
++}
++
++func PkgConfigsToBuildDeps(pkgConfigs []string) (buildDeps []string) {
++
++	for p, entry := range Dictionary.Packages {
++		for eopkgFile, provides := range entry.EopkgFile {
++			needForBuild := false
++			for _, provision := range provides {
++				if needForBuild {
++					break
++				}
++				for _, need := range pkgConfigs {
++					if needForBuild {
++						break
++					}
++					if need == provision {
++						needForBuild = true
++						break
++					}
++				}
++			}
++			if needForBuild {
++				packageMeta, err := eopkg.ExtractMetaData(p + "/" + eopkgFile)
++
++				if err == nil {
++					packageName := (*packageMeta).Package.Name
++					buildDeps = append(buildDeps, packageName)
++				}
++			}
++		}
++
++	}
++
++	return
++
 +}
