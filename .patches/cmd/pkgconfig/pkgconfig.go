@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,146 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -110,26 +110,7 @@
 +	packageList := packages.ListNames("./")
 +
 +	for _, pName := range packageList {
-+		eopkgFiles := packages.ListCurrentEopkgFiles(pName + "/")
-+		newEntry := Entry{}
-+		for _, fileName := range eopkgFiles {
-+			var meta *libeopkg.Metadata
-+			meta, err := eopkg.ExtractMetaData(pName + "/" + fileName)
-+			if err == nil {
-+				provides := (*meta).Package.Provides
-+				if provides != nil {
-+					if newEntry.EopkgFile == nil {
-+						newEntry = Entry{
-+							EopkgFile: map[string][]string{},
-+						}
-+					}
-+					newEntry.EopkgFile[fileName] = (*provides).PkgConfig
-+				}
-+			}
-+		}
-+		if newEntry.EopkgFile != nil {
-+			Dictionary.Packages[pName] = newEntry
-+		}
++		UpdateEntry(pName)
 +	}
 +
 +	return nil
@@ -140,5 +121,29 @@
 +	if Dictionary.Packages == nil {
 +		Dictionary = Dict{}
 +		Dictionary.Packages = map[string]Entry{}
++	}
++}
++
++func UpdateEntry(pName string) {
++
++	eopkgFiles := packages.ListCurrentEopkgFiles(pName + "/")
++	newEntry := Entry{}
++	for _, fileName := range eopkgFiles {
++		var meta *libeopkg.Metadata
++		meta, err := eopkg.ExtractMetaData(pName + "/" + fileName)
++		if err == nil {
++			provides := (*meta).Package.Provides
++			if provides != nil {
++				if newEntry.EopkgFile == nil {
++					newEntry = Entry{
++						EopkgFile: map[string][]string{},
++					}
++				}
++				newEntry.EopkgFile[fileName] = (*provides).PkgConfig
++			}
++		}
++	}
++	if newEntry.EopkgFile != nil {
++		Dictionary.Packages[pName] = newEntry
 +	}
 +}
