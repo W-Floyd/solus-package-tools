@@ -1,6 +1,17 @@
 ---
 +++
-@@ -35,17 +35,11 @@
+@@ -23,8 +23,10 @@
+ 
+ import (
+ 	"fmt"
++	"log"
+ 	"os"
+ 
++	"github.com/W-Floyd/solus-package-tools/solus-package-tools/cmd/pkgconfig"
+ 	"github.com/spf13/cobra"
+ 
+ 	homedir "github.com/mitchellh/go-homedir"
+@@ -35,22 +37,21 @@
  
  // rootCmd represents the base command when called without any subcommands
  var rootCmd = &cobra.Command{
@@ -23,7 +34,17 @@
  }
  
  // Execute adds all child commands to the root command and sets flags appropriately.
-@@ -64,7 +58,7 @@
+ // This is called by main.main(). It only needs to happen once to the rootCmd.
+ func Execute() {
++	err := pkgconfig.LoadPkgConfigDictionary()
++	if err != nil {
++		log.Fatal("LoadPkgConfigDictionary failed")
++	}
++
+ 	if err := rootCmd.Execute(); err != nil {
+ 		fmt.Println(err)
+ 		os.Exit(1)
+@@ -64,7 +65,7 @@
  	// Cobra supports persistent flags, which, if defined here,
  	// will be global for your application.
  
@@ -32,7 +53,7 @@
  
  	// Cobra also supports local flags, which will only run
  	// when this action is called directly.
-@@ -86,13 +80,12 @@
+@@ -86,13 +87,12 @@
  
  		// Search config in home directory with name ".solus-package-tools" (without extension).
  		viper.AddConfigPath(home)
