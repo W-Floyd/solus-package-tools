@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,91 @@
+@@ -0,0 +1,94 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -36,12 +36,11 @@
 +var dictionaryLocation = "pkgconfigDictionary.yaml"
 +
 +type PkgConfigDictionary struct {
-+	Packages *[]PkgEntry
++	Packages map[string]PkgEntry
 +}
 +
 +type PkgEntry struct {
-+	PkgName   string
-+	EopkgFile *map[string]string
++	EopkgFile map[string]string
 +}
 +
 +func LoadPkgConfigDictionary() (err error) {
@@ -54,6 +53,10 @@
 +		}
 +
 +		err = json.Unmarshal(data, &PkgConfigDictionaryVar)
++
++		if PkgConfigDictionaryVar.Packages == nil {
++			PkgConfigDictionaryVar.Packages = map[string]PkgEntry{}
++		}
 +
 +		if err != nil {
 +			return err
