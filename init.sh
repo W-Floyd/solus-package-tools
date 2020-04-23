@@ -12,6 +12,7 @@ diff"
 ################################################################################
 
 __package_name="solus-package-tools"
+__package_name_short="spt"
 __package_path="github.com/W-Floyd/solus-package-tools"
 
 __package_full="${__package_path}/${__package_name}"
@@ -100,7 +101,7 @@ fi
 
 #pushd "${__package_name}" 1>/dev/null
 
-#go build -o ~/go/bin/${__package_name}
+#go build -o ~/go/bin/${__package_name_short}
 
 #popd 1>/dev/null
 

@@ -6,7 +6,7 @@
         {
             "label": "Build & Install",
             "type": "shell",
-            "command": "cd solus-package-tools && go build -o ~/go/bin/solus-package-tools",
+            "command": "cd solus-package-tools && go build -o ~/go/bin/spt",
             "group": {
                 "kind": "build",
                 "isDefault": true
