@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,141 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -28,22 +28,29 @@
 +	"encoding/json"
 +	"io/ioutil"
 +	"os"
++
++	"github.com/W-Floyd/solus-package-tools/solus-package-tools/cmd/eopkg"
++	"github.com/W-Floyd/solus-package-tools/solus-package-tools/cmd/packages"
++	"github.com/getsolus/libeopkg"
 +)
 +
-+// PkgConfigDictionary will be accessible by later functions so that pkgconfigs can be cached automatically whenever a package is built
-+var PkgConfigDictionaryVar PkgConfigDictionary
++// Dictionary will be accessible by later functions so that pkgconfigs can be cached automatically whenever a package is built
++// It also allows us to modify the pkgconfigdictionary globally, as needed (especially in build)
++var Dictionary Dict
 +
 +var dictionaryLocation = "pkgconfigDictionary.yaml"
 +
-+type PkgConfigDictionary struct {
-+	Packages map[string]PkgEntry
++// Dict is used to know where to find any given pkgconfig
++type Dict struct {
++	Packages map[string]Entry
 +}
 +
-+type PkgEntry struct {
-+	EopkgFile map[string]string
++// Entry is used to know what specific eopkg file provides which pkgconfig
++type Entry struct {
++	EopkgFile map[string][]string
 +}
 +
-+func LoadPkgConfigDictionary() (err error) {
++func LoadDictionary() error {
 +
 +	if _, err := os.Stat(dictionaryLocation); err == nil {
 +		data, err := ioutil.ReadFile(dictionaryLocation)
@@ -52,11 +59,9 @@
 +			return err
 +		}
 +
-+		err = json.Unmarshal(data, &PkgConfigDictionaryVar)
++		initDictionary()
 +
-+		if PkgConfigDictionaryVar.Packages == nil {
-+			PkgConfigDictionaryVar.Packages = map[string]PkgEntry{}
-+		}
++		err = json.Unmarshal(data, &Dictionary)
 +
 +		if err != nil {
 +			return err
@@ -66,9 +71,9 @@
 +
 +	}
 +
-+	PkgConfigDictionaryVar = PkgConfigDictionary{}
++	initDictionary()
 +
-+	err = WritePkgConfigDictionary()
++	err := WriteDictionary()
 +
 +	if err != nil {
 +		return err
@@ -78,9 +83,11 @@
 +
 +}
 +
-+func WritePkgConfigDictionary() (err error) {
++func WriteDictionary() error {
 +
-+	data, err := json.Marshal(PkgConfigDictionaryVar)
++	initDictionary()
++
++	data, err := json.MarshalIndent(Dictionary, "", "\t")
 +
 +	if err != nil {
 +		return err
@@ -94,4 +101,44 @@
 +
 +	return nil
 +
++}
++
++func UpdateDictionary() error {
++
++	initDictionary()
++
++	packageList := packages.ListNames("./")
++
++	for _, pName := range packageList {
++		eopkgFiles := packages.ListCurrentEopkgFiles(pName + "/")
++		newEntry := Entry{}
++		for _, fileName := range eopkgFiles {
++			var meta *libeopkg.Metadata
++			meta, err := eopkg.ExtractMetaData(pName + "/" + fileName)
++			if err == nil {
++				provides := (*meta).Package.Provides
++				if provides != nil {
++					if newEntry.EopkgFile == nil {
++						newEntry = Entry{
++							EopkgFile: map[string][]string{},
++						}
++					}
++					newEntry.EopkgFile[fileName] = (*provides).PkgConfig
++				}
++			}
++		}
++		if newEntry.EopkgFile != nil {
++			Dictionary.Packages[pName] = newEntry
++		}
++	}
++
++	return nil
++
++}
++
++func initDictionary() {
++	if Dictionary.Packages == nil {
++		Dictionary = Dict{}
++		Dictionary.Packages = map[string]Entry{}
++	}
 +}

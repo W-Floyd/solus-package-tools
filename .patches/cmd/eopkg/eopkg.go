@@ -32,7 +32,7 @@
 +	"github.com/getsolus/libeopkg"
 +)
 +
-+func extractMetaData(filename string) (metadata *libeopkg.Metadata, err error) {
++func ExtractMetaData(filename string) (metadata *libeopkg.Metadata, err error) {
 +	pkg, err := libeopkg.Open(filename)
 +
 +	if err != nil {
@@ -50,7 +50,7 @@
 +
 +// PrintMetaDataJSON prints a pretty JSON output of a package metadata
 +func PrintMetaDataJSON(filename string) {
-+	metadata, err := extractMetaData(filename)
++	metadata, err := ExtractMetaData(filename)
 +
 +	if err != nil {
 +		log.Fatal(err)

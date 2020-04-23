@@ -62,7 +62,8 @@ pushd "${__package_name}" 1>/dev/null
 
     while read -r __command; do
         __cobra add "${__command}"
-    done <<<'info'
+    done <<<'info
+dict'
 
     # while read -r __subcommand; do
     #     __cobra add -p infoCmd "${__subcommand}"

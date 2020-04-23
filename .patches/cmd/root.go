@@ -36,9 +36,9 @@
  // Execute adds all child commands to the root command and sets flags appropriately.
  // This is called by main.main(). It only needs to happen once to the rootCmd.
  func Execute() {
-+	if err := pkgconfig.LoadPkgConfigDictionary(); err != nil {
++	if err := pkgconfig.LoadDictionary(); err != nil {
 +		log.Println(err)
-+		log.Fatal("LoadPkgConfigDictionary failed")
++		log.Fatal("LoadDictionary failed")
 +	}
 +
  	if err := rootCmd.Execute(); err != nil {
@@ -46,9 +46,9 @@
  		os.Exit(1)
  	}
 +
-+	if err := pkgconfig.WritePkgConfigDictionary(); err != nil {
++	if err := pkgconfig.WriteDictionary(); err != nil {
 +		log.Println(err)
-+		log.Fatal("WritePkgConfigDictionary failed")
++		log.Fatal("WriteDictionary failed")
 +	}
  }
  
