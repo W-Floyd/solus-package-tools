@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,181 @@
+@@ -0,0 +1,173 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -38,6 +38,8 @@
 +// It also allows us to modify the pkgconfigdictionary globally, as needed (especially in build)
 +var Dictionary Dict
 +
++var DictionaryLoaded = false
++
 +var dictionaryLocation = "pkgconfigDictionary.yaml"
 +
 +// Dict is used to know where to find any given pkgconfig
@@ -52,6 +54,8 @@
 +
 +func LoadDictionary() error {
 +
++	initDictionary()
++
 +	if _, err := os.Stat(dictionaryLocation); err == nil {
 +		data, err := ioutil.ReadFile(dictionaryLocation)
 +
@@ -59,24 +63,12 @@
 +			return err
 +		}
 +
-+		initDictionary()
-+
 +		err = json.Unmarshal(data, &Dictionary)
 +
 +		if err != nil {
 +			return err
 +		}
 +
-+		return nil
-+
-+	}
-+
-+	initDictionary()
-+
-+	err := WriteDictionary()
-+
-+	if err != nil {
-+		return err
 +	}
 +
 +	return nil

@@ -1,6 +1,6 @@
 ---
 +++
-@@ -22,23 +22,17 @@
+@@ -22,23 +22,18 @@
  package cmd
  
  import (
@@ -25,10 +25,11 @@
  	Run: func(cmd *cobra.Command, args []string) {
 -		fmt.Println("dict called")
 +		pkgconfig.UpdateDictionary()
++		pkgconfig.WriteDictionary()
  	},
  }
  
-@@ -53,5 +47,5 @@
+@@ -53,5 +48,5 @@
  
  	// Cobra supports local flags which will only run when this command
  	// is called directly, e.g.:
