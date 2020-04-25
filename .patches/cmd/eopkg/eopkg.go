@@ -1,6 +1,6 @@
 ---
 +++
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,70 @@
 +/*
 +Copyright © 2020 William Floyd <william.png2000@gmail.com>
 +
@@ -40,6 +40,12 @@
 +	}
 +
 +	err = pkg.ReadMetadata()
++
++	if err != nil {
++		return metadata, err
++	}
++
++	err = pkg.Close()
 +
 +	if err != nil {
 +		return metadata, err
